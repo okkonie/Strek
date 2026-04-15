@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+.vscode
+google-services.json
+
 # Expo
 .expo/
 dist/

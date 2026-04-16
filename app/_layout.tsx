@@ -1,8 +1,17 @@
 import { Stack, useSegments, useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import { FirebaseAuthTypes, getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts({
+    'SpaceMono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'SpaceMonoBold': require('../assets/fonts/SpaceMono-Bold.ttf')
+  });
+
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
   const router = useRouter();
@@ -30,6 +39,16 @@ export default function RootLayout() {
       router.replace('/');
     }
   }, [user, initializing])
+
+  useEffect(() => {
+    if (fontsLoaded || fontError || initializing) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <Stack>

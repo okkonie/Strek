@@ -9,7 +9,7 @@ const colors: Colors = {
   background: "#000000",
   text: "#efefef",
   text2: "#a1a1a1",
-  button: "#b9772f"
+  button: "#2c2c2c"
 }
 
 export default colors;

@@ -18,18 +18,20 @@ export default function Index() {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const response = await GoogleSignin.signIn();
-      if (response.data) {
-        const googleCredential = GoogleAuthProvider.credential(response.data.idToken);
-        await signInWithCredential(getAuth(), googleCredential);
-      } else {
-        throw new Error("No idToken returned.");
+      
+      if (response.type === 'success') {
+        if (response.data?.idToken) {
+          const googleCredential = GoogleAuthProvider.credential(response.data.idToken);
+          await signInWithCredential(getAuth(), googleCredential);
+        } else {
+          throw new Error("No idToken returned.");
+        }
+      } else if (response.type === 'cancelled') {
+        console.log("User cancelled Google Sign-in");
       }
     } catch(e: any) {
-      if (e.code === 'SIGN_IN_CANCELLED') {
-         // Optionally handle cancellation
-      } else {
-         alert("Google Sign-In failed: " + e.message);
-      }
+      alert("Google Sign-In failed: " + e.message);
+      console.log(e.code)
     } finally {
       setLoading(false);
     }
@@ -37,13 +39,19 @@ export default function Index() {
 
   return (
     <View style={s.container}>
-      <Text style={s.title}>Log in with Google</Text>
-      <Button 
-        title="Continue with Google" 
-        onPress={() => signInWithGoogle()} 
-        loading={loading}
-        icon={<FontAwesome6 name="google" size={18} color={colors.text} />}
-      />
+      <View>
+        <Text style={s.title}>Log in</Text>
+        <Text style={s.title}>via Google</Text>
+      </View>
+      <View style={s.btnContainer}> 
+        <Button 
+          onPress={() => signInWithGoogle()} 
+          loading={loading}
+          style={{borderRadius: 99}}
+        >
+          <FontAwesome6 name="google" size={20} color={colors.text} />
+        </Button>
+      </View>
     </View>
   );
 }
@@ -54,12 +62,16 @@ const s = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column',
-    gap: 24,
+    padding: 32,
+    gap: 42,
     backgroundColor: colors.background
   },
   title: {
     fontSize: 24,
-    fontWeight: 500,
-    color: colors.text
+    color: colors.text,
+    fontFamily: 'SpaceMonoBold'
+  },
+  btnContainer: {
+    alignItems: 'flex-end'
   }
 })

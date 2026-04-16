@@ -3,7 +3,7 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Button from "../../components/Button";
 import colors from "../../constants/colors";
-
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 export default function Page(){
   const handleSignOut = async () => {
     try {
@@ -16,8 +16,12 @@ export default function Page(){
 
   return (
     <View style={s.container}>
-      <Text style={s.title}>Welcome Home!</Text>
-      <Button title="Sign out" onPress={handleSignOut} loading={false}/>
+      <View style={s.head}>
+        <Text style={s.title}>Your Streks</Text>
+        <Button onPress={handleSignOut} loading={false} style={{borderRadius: 999}}>
+          <FontAwesome6 name="arrow-right-from-bracket" size={16} color={colors.text}/>
+        </Button>
+      </View>
     </View>
   )
 }
@@ -25,14 +29,20 @@ export default function Page(){
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.background,
     paddingHorizontal: 20,
   },
+  head: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10
+  },
   title: {
     color: colors.text,
+    fontFamily: 'SpaceMonoBold',
     fontSize: 24,
-    marginBottom: 20,
   }
 });

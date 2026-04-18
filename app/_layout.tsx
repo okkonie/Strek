@@ -18,7 +18,7 @@ export default function RootLayout() {
   const segments = useSegments();
 
   const handleAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    console.log("onAuthChanged", user ? user.uid : null);
+    console.log(user ? user.uid : null);
     setUser(user);
     if(initializing) setInitializing(false);
   }

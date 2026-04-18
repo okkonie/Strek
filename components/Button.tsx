@@ -20,7 +20,7 @@ export default function Button({ children, loading, style, ...rest }: CustomButt
 
 const s = StyleSheet.create({
   button: {
-    backgroundColor: colors.button,
+    backgroundColor: colors.primary,
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',

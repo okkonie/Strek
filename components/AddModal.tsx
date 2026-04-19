@@ -14,7 +14,7 @@ export default function AddModal({ visible, onClose }: AddModalProps) {
         <View style={s.content}>
           <View style={s.head}>
             <Text style={s.title}>New Strek!</Text>
-            <Button />
+            <Button icon="close" iconSize={16} onPress={onClose}/>
           </View>
         </View>
       </View>
@@ -36,9 +36,14 @@ const s = StyleSheet.create({
   },
   head: {
     justifyContent: 'space-between',
-    padding: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 22,
+    paddingVertical: 10
   },
   title: {
-    color: colors.text
+    color: colors.text,
+    fontSize: 20,
+    fontFamily: 'SpaceMonoBold'
   }
 });

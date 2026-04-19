@@ -1,10 +1,9 @@
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import { useState } from "react";
 import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import colors from "../constants/colors";
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 GoogleSignin.configure({
   webClientId: '456320109785-uul0ab90iherg5pe4c02kod3dni1o3lu.apps.googleusercontent.com',
@@ -47,10 +46,10 @@ export default function Index() {
         <Button 
           onPress={() => signInWithGoogle()} 
           loading={loading}
-          style={{borderRadius: 99}}
-        >
-          <FontAwesome6 name="google" size={20} color={colors.text} />
-        </Button>
+          icon="google"
+          iconSize={20}
+          size={50}
+        />
       </View>
     </View>
   );

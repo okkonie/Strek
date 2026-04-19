@@ -5,7 +5,6 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Button from "../../components/Button";
 import colors from "../../constants/colors";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AddModal from "@/components/AddModal";
 
 
@@ -25,14 +24,19 @@ export default function Page(){
     <View style={s.container}>
       <View style={s.head}>
         <Text style={s.title}>Your Streks</Text>
-        <Button onPress={handleSignOut} loading={false} style={{borderRadius: 999}}>
-          <FontAwesome6 name="arrow-right-from-bracket" size={16} color={colors.text}/>
-        </Button>
+        <Button 
+          onPress={handleSignOut} 
+          icon="logout"
+        />
       </View>
 
-      <Button onPress={() => setAddOpen(true)} loading={false} style={{borderRadius: 999}}>
-        <FontAwesome6 name="plus" size={16} color={colors.text}/>
-      </Button>
+      <Button 
+        onPress={() => setAddOpen(true)} 
+        icon="plus"
+        size={52}
+        iconSize={20}
+        style={s.addBtn}
+      />
 
       <AddModal visible={addOpen} onClose={() => setAddOpen(false)} />
     </View>
@@ -57,6 +61,11 @@ const s = StyleSheet.create({
     color: colors.text,
     fontFamily: 'SpaceMonoBold',
     fontSize: 24,
+  },
+  addBtn: {
+    position: 'absolute',
+    bottom: 30,
+    right: 20,
   },
   list: {
     flex: 1,

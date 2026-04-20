@@ -1,6 +1,7 @@
 import colors from "@/constants/colors";
-import { Modal, View, StyleSheet, Text } from "react-native";
+import { Modal, View, StyleSheet, Text, TextInput } from "react-native";
 import Button from "./Button";
+import TimePicker from "./TimePicker";
 
 type AddModalProps = {
   visible: boolean;
@@ -16,6 +17,15 @@ export default function AddModal({ visible, onClose }: AddModalProps) {
             <Text style={s.title}>New Strek!</Text>
             <Button icon="close" iconSize={16} onPress={onClose}/>
           </View>
+          
+          <TextInput 
+            style={s.input}
+            placeholder="Strek name"
+            placeholderTextColor={colors.text2}
+            cursorColor={colors.text}
+          />
+
+          <TimePicker />
         </View>
       </View>
     </Modal>
@@ -32,18 +42,26 @@ const s = StyleSheet.create({
     maxHeight: '80%',
     borderTopEndRadius: 44,
     borderTopStartRadius: 44,
-    backgroundColor: colors.secondary
+    backgroundColor: colors.secondary,
+    paddingHorizontal: 22,
   },
   head: {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 22,
     paddingVertical: 10
   },
   title: {
     color: colors.text,
     fontSize: 20,
     fontFamily: 'SpaceMonoBold'
+  },
+  input: {
+    backgroundColor: colors.primary,
+    borderRadius: 14,
+    padding: 16,
+    fontFamily: 'SpaceMono',
+    height: 52,
+    color: colors.text
   }
 });

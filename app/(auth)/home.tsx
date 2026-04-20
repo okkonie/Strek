@@ -6,10 +6,13 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Button from "../../components/Button";
 import colors from "../../constants/colors";
 import AddModal from "@/components/AddModal";
+import Strek from "@/components/Strek";
+import { useAuth } from "@/context/AuthContext";
 
 
 export default function Page(){
   const [addOpen, setAddOpen] = useState(false);
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
     try {
@@ -23,7 +26,7 @@ export default function Page(){
   return (
     <View style={s.container}>
       <View style={s.head}>
-        <Text style={s.title}>Your Streks</Text>
+        <Text style={s.title}>{user?.displayName}'s Streks</Text>
         <Button 
           onPress={handleSignOut} 
           icon="logout"
@@ -36,6 +39,13 @@ export default function Page(){
         size={52}
         iconSize={20}
         style={s.addBtn}
+      />
+
+      <FlatList 
+        data={[]}
+        renderItem={() => <Strek/>}
+        keyExtractor={(_, index) => index.toString()}
+        style={s.list}
       />
 
       <AddModal visible={addOpen} onClose={() => setAddOpen(false)} />
@@ -61,6 +71,12 @@ const s = StyleSheet.create({
     color: colors.text,
     fontFamily: 'SpaceMonoBold',
     fontSize: 24,
+  },
+  subTitle: {
+    width: '100%',
+    color: colors.text2,
+    fontFamily: 'SpaceMono',
+    marginBottom: 8,
   },
   addBtn: {
     position: 'absolute',

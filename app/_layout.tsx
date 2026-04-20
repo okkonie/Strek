@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { FirebaseAuthTypes, getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { AuthProvider } from "@/context/AuthContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -13,12 +14,11 @@ export default function RootLayout() {
   });
 
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const router = useRouter();
   const segments = useSegments();
 
   const handleAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    console.log(user ? user.uid : null);
     setUser(user);
     if(initializing) setInitializing(false);
   }
@@ -38,22 +38,24 @@ export default function RootLayout() {
     } else if(!user && inAuthGroup){
       router.replace('/');
     }
-  }, [user, initializing])
+  }, [user, initializing, segments, router])
 
   useEffect(() => {
-    if (fontsLoaded || fontError || initializing) {
+    if (fontsLoaded || fontError || !initializing) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, initializing]);
 
-  if (!fontsLoaded && !fontError) {
+  if ((!fontsLoaded && !fontError) || initializing) {
     return null;
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{headerShown: false}}/>
-      <Stack.Screen name="(auth)" options={{headerShown: false}}/>
-    </Stack>
+    <AuthProvider user={user}>
+      <Stack>
+        <Stack.Screen name="index" options={{headerShown: false}}/>
+        <Stack.Screen name="(auth)" options={{headerShown: false}}/>
+      </Stack>
+    </AuthProvider>
   )
 }

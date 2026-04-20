@@ -1,3 +1,5 @@
+import { View } from "react-native";
+
 interface Strek {
   name: string;
   timeCreated: string;
@@ -6,6 +8,9 @@ interface Strek {
 }
 
 export default function Strek(){
+  return (
+    <View>
 
-
+    </View>
+  )
 }

@@ -1,6 +1,7 @@
 import colors from "@/constants/colors";
-import { Modal, View, StyleSheet, Text, TextInput } from "react-native";
+import { Modal, View, StyleSheet, Text, TextInput, Pressable } from "react-native";
 import Button from "./Button";
+import { useState } from "react";
 import TimePicker from "./TimePicker";
 
 type AddModalProps = {
@@ -9,10 +10,11 @@ type AddModalProps = {
 };
 
 export default function AddModal({ visible, onClose }: AddModalProps) {
+
   return (
     <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <View style={s.container}>
-        <View style={s.content}>
+      <Pressable style={s.container} onPress={onClose}>
+        <View style={s.content} onStartShouldSetResponder={() => true}>
           <View style={s.head}>
             <Text style={s.title}>New Strek!</Text>
             <Button icon="close" iconSize={16} onPress={onClose}/>
@@ -26,8 +28,9 @@ export default function AddModal({ visible, onClose }: AddModalProps) {
           />
 
           <TimePicker />
+
         </View>
-      </View>
+      </Pressable>
     </Modal>
   );
 }

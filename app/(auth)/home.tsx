@@ -1,17 +1,17 @@
-
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { useState } from "react"
+import { useState } from "react";
 import { getAuth, signOut } from "@react-native-firebase/auth";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Button from "../../components/Button";
 import colors from "../../constants/colors";
 import AddModal from "@/components/AddModal";
 import Strek from "@/components/Strek";
+import type { StrekData } from "@/components/Strek";
 import { useAuth } from "@/context/AuthContext";
 
-
-export default function Page(){
+export default function Page() {
   const [addOpen, setAddOpen] = useState(false);
+  const [streks, setStreks] = useState<StrekData[]>([]);
   const { user } = useAuth();
 
   const handleSignOut = async () => {
@@ -23,67 +23,81 @@ export default function Page(){
     }
   };
 
+  const handleAddStrek = (strek: StrekData) => {
+    setStreks((prev) => [strek, ...prev]);
+  };
+
   return (
     <View style={s.container}>
       <View style={s.head}>
-        <Text style={s.title}>{user?.displayName}'s Streks</Text>
-        <Button 
-          onPress={handleSignOut} 
-          icon="logout"
-        />
+        <Text style={s.title}>{user?.displayName}&apos;s Streks</Text>
+        <Button onPress={handleSignOut} icon="logout" />
       </View>
 
-      <Button 
-        onPress={() => setAddOpen(true)} 
+      <FlatList
+        data={streks}
+        renderItem={({ item }) => <Strek data={item} />}
+        keyExtractor={(item) => item.id}
+        style={s.list}
+        contentContainerStyle={s.listContent}
+        ListEmptyComponent={
+          <Text style={s.emptyText}>No streks yet. Add one!</Text>
+        }
+      />
+
+      <Button
+        onPress={() => setAddOpen(true)}
         icon="plus"
         size={52}
         iconSize={20}
         style={s.addBtn}
       />
 
-      <FlatList 
-        data={[]}
-        renderItem={() => <Strek/>}
-        keyExtractor={(_, index) => index.toString()}
-        style={s.list}
+      <AddModal
+        visible={addOpen}
+        onClose={() => setAddOpen(false)}
+        onAdd={handleAddStrek}
       />
-
-      <AddModal visible={addOpen} onClose={() => setAddOpen(false)} />
     </View>
-  )
+  );
 }
 
 const s = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: colors.background,
     paddingHorizontal: 20,
   },
   head: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
   },
   title: {
     color: colors.text,
-    fontFamily: 'SpaceMonoBold',
+    fontFamily: "SpaceMonoBold",
     fontSize: 24,
   },
-  subTitle: {
-    width: '100%',
-    color: colors.text2,
-    fontFamily: 'SpaceMono',
-    marginBottom: 8,
-  },
   addBtn: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 30,
     right: 20,
   },
   list: {
     flex: 1,
-  }
+    width: "100%",
+  },
+  listContent: {
+    paddingBottom: 100,
+  },
+  emptyText: {
+    color: colors.text2,
+    fontFamily: "SpaceMono",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 40,
+  },
 });

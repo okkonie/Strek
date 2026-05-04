@@ -1,34 +1,36 @@
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import colors from "@/constants/colors";
-import { useState } from "react";
 
-const BLOCK = 50;
+interface TimePickerProps {
+  value: string;
+  onChangeText: (text: string) => void;
+}
 
-export default function TimePicker() {
-  const hourValues: string[] = []; 
-  for (let i = 0; i < 24; i++) hourValues.push(i.toString().padStart(2, "0"));
+export default function TimePicker({ value, onChangeText }: TimePickerProps) {
+  const handleChange = (text: string) => {
+    // Allow only digits and colon, auto-format to HH:MM
+    const digits = text.replace(/[^0-9]/g, "");
 
-
-  const minValues: string[] = []; 
-  for(let j = 0; j < 60; j++) minValues.push(j.toString().padStart(2, "0"));
-
-  const TimeScroll = ({ values }: { values: string[] }) => {
-    return (
-      <ScrollView style={s.scroll} pagingEnabled>
-        {values.map((x) => 
-          <Text style={{height: BLOCK, width: '100%', textAlign: 'center', justifyContent: 'center'}}>{x}</Text>
-        )}
-      </ScrollView>
-    )
-  } 
+    if (digits.length <= 2) {
+      onChangeText(digits);
+    } else if (digits.length <= 4) {
+      onChangeText(`${digits.slice(0, 2)}:${digits.slice(2)}`);
+    }
+  };
 
   return (
     <View style={s.container}>
-      <Text style={s.title}>Time:</Text>
-      <View style={s.pickerContainer}>
-        <TimeScroll values={hourValues} />
-        <TimeScroll values={minValues} />
-      </View>
+      <Text style={s.label}>Time:</Text>
+      <TextInput
+        style={s.input}
+        value={value}
+        onChangeText={handleChange}
+        placeholder="HH:MM"
+        placeholderTextColor={colors.text2}
+        cursorColor={colors.text}
+        keyboardType="number-pad"
+        maxLength={5}
+      />
     </View>
   );
 }
@@ -38,22 +40,20 @@ const s = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 20,
     gap: 20,
   },
-  title: {
-    fontFamily: 'SpaceMono',
+  label: {
+    fontFamily: "SpaceMono",
     fontSize: 16,
-    color: colors.text
+    color: colors.text,
   },
-  pickerContainer: {
-    flexDirection: 'row',
-    gap: 6,
+  input: {
     flex: 1,
-    height: BLOCK * 3
+    backgroundColor: colors.primary,
+    borderRadius: 14,
+    padding: 16,
+    fontFamily: "SpaceMono",
+    height: 52,
+    color: colors.text,
   },
-  scroll: {
-    width: 'auto',
-    height: '100%',
-  }
 });
